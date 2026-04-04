@@ -233,7 +233,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .install-title{font-size:13px;font-weight:800;letter-spacing:-.01em;}
 .install-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
 .install-btn{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:9px 15px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;}
-.install-x{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--input-bg);color:var(--text-muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.install-x{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* ANIMATIONS */
@@ -1913,18 +1913,32 @@ function addFavToLog(){
 let _deferredPrompt = null;
 const _installBanner = () => document.getElementById('install-banner');
 
+// Ako je već instalirana kao PWA — nikad ne prikazuj banner
+const _isStandalone = () =>
+  window.matchMedia('(display-mode: standalone)').matches ||
+  window.navigator.standalone === true;
+
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   _deferredPrompt = e;
-  if (!localStorage.getItem('installDismissed')) {
+  if (!_isStandalone() && !localStorage.getItem('installDismissed')) {
     setTimeout(() => _installBanner() && _installBanner().classList.add('show'), 1500);
   }
 });
 
 window.addEventListener('appinstalled', () => {
   _installBanner().classList.remove('show');
+  localStorage.setItem('installDismissed', '1');
   _deferredPrompt = null;
 });
+
+// Sakrij odmah ako je standalone pri pokretanju
+if (_isStandalone()) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const b = _installBanner();
+    if (b) b.style.display = 'none';
+  });
+}
 
 async function triggerInstall() {
   if (!_deferredPrompt) {
