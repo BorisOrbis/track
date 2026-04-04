@@ -745,8 +745,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
         <div style="font-size:28px;font-weight:800;letter-spacing:-.02em;margin-bottom:10px;">Dobrodošao u <span style="color:var(--accent)">Track</span></div>
         <div style="font-size:14px;color:var(--text-muted);line-height:1.6;">Brzo postavi svoje ciljeve i počni pratiti napredak.<br>Traje manje od minute.</div>
       </div>
+      <div style="margin-bottom:8px;font-size:11px;color:var(--text-muted);font-family:var(--font-mono);letter-spacing:.1em;">KORAK 1 OD 2</div>
       <div style="margin-bottom:20px;">
-        <div class="slabel" style="margin-bottom:8px;">💪 Što želiš postići? (odaberi sve što se odnosi)</div>
+        <div class="slabel" style="margin-bottom:8px;">💪 Što želiš postići? (opcionalno)</div>
         <div id="ob-goals-list" style="display:flex;flex-direction:column;gap:8px;"></div>
       </div>
       <div style="margin-bottom:20px;">
@@ -756,31 +757,44 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <button onclick="obNext(1)" class="ob-btn-primary">Dalje →</button>
     </div>
 
-    <!-- Step 2: Postavi rok -->
+    <!-- Step 2: Tjelesni podaci -->
     <div id="ob-step-2" class="ob-step" style="display:none;">
-      <div style="margin-bottom:8px;font-size:11px;color:var(--text-muted);font-family:var(--font-mono);letter-spacing:.1em;">KORAK 2 OD 3</div>
-      <div style="font-size:22px;font-weight:800;margin-bottom:6px;">Kad to planiraš postići?</div>
-      <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;">Rok ti pomaže ostati fokusiran.</div>
-      <div id="ob-deadline-opts" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;"></div>
-      <div style="margin-bottom:24px;">
-        <div class="slabel" style="margin-bottom:6px;">ili odaberi datum</div>
-        <input type="date" id="ob-date" class="sinput">
+      <div style="margin-bottom:8px;font-size:11px;color:var(--text-muted);font-family:var(--font-mono);letter-spacing:.1em;">KORAK 2 OD 2</div>
+      <div style="font-size:22px;font-weight:800;margin-bottom:6px;">Tvoji podaci</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;">Potrebni za izračun BMR-a i kalorijskog cilja.</div>
+
+      <div class="two-col" style="margin-bottom:16px;">
+        <div class="srow">
+          <div class="slabel">🎂 Godine</div>
+          <input type="number" id="ob-age" class="sinput" placeholder="npr. 35" min="10" max="99" oninput="obRecalc()">
+        </div>
+        <div class="srow">
+          <div class="slabel">📏 Visina (cm)</div>
+          <input type="number" id="ob-height" class="sinput" placeholder="npr. 178" min="100" max="250" oninput="obRecalc()">
+        </div>
       </div>
+      <div class="two-col" style="margin-bottom:16px;">
+        <div class="srow">
+          <div class="slabel">⚖️ Trenutna težina (kg)</div>
+          <input type="number" id="ob-weight" class="sinput" placeholder="npr. 90" min="30" max="300" step="0.1" oninput="obRecalc()">
+        </div>
+        <div class="srow">
+          <div class="slabel">🎯 Ciljna težina (kg)</div>
+          <input type="number" id="ob-goal-weight" class="sinput" placeholder="npr. 80" min="30" max="300" step="0.1" oninput="obRecalc()">
+        </div>
+      </div>
+
+      <!-- BMR preview -->
+      <div id="ob-bmr-box" class="bmr-box" style="display:none;margin-bottom:20px;">
+        <div class="brow"><span>BMR</span><span class="bval" id="ob-bmr-val">—</span></div>
+        <div class="brow"><span>TDEE (umjerena aktivnost)</span><span class="bval" id="ob-tdee-val">—</span></div>
+        <div class="brow"><span>Preporučeni unos</span><span class="bhl" id="ob-rec-val">—</span></div>
+      </div>
+
+      <div id="ob-data-err" style="color:var(--accent);font-size:12px;font-weight:700;margin-bottom:12px;display:none;"></div>
+
       <div style="display:flex;gap:10px;">
         <button onclick="obBack(2)" class="ob-btn-secondary">← Nazad</button>
-        <button onclick="obNext(2)" class="ob-btn-primary" style="flex:1;">Dalje →</button>
-      </div>
-    </div>
-
-    <!-- Step 3: Motivacija -->
-    <div id="ob-step-3" class="ob-step" style="display:none;">
-      <div style="margin-bottom:8px;font-size:11px;color:var(--text-muted);font-family:var(--font-mono);letter-spacing:.1em;">KORAK 3 OD 3</div>
-      <div style="font-size:22px;font-weight:800;margin-bottom:6px;">Zašto ti je to važno?</div>
-      <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;">Podsjetnik na tvoju motivaciju pomaže u teškim danima.</div>
-      <textarea id="ob-motivation" class="sinput" rows="3" placeholder="npr. Želim biti fit za ljetni odmor i imati više energije za obitelj…" style="resize:none;line-height:1.5;font-size:14px;"></textarea>
-      <div style="margin-bottom:24px;"></div>
-      <div style="display:flex;gap:10px;">
-        <button onclick="obBack(3)" class="ob-btn-secondary">← Nazad</button>
         <button onclick="obFinish()" class="ob-btn-primary" style="flex:1;background:var(--green);">✓ Počni pratiti</button>
       </div>
     </div>
@@ -788,17 +802,6 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   </div>
 </div>
 
-<div class="install-banner" id="install-banner">
-  <div class="install-inner">
-    <div class="install-icon">📲</div>
-    <div class="install-text">
-      <div class="install-title">Dodaj na početni ekran</div>
-      <div class="install-sub">Radi offline · Brži pristup</div>
-    </div>
-    <button class="install-btn" onclick="triggerInstall()">Instaliraj</button>
-    <button class="install-x" onclick="dismissInstall()">✕</button>
-  </div>
-</div>
 <div class="toast" id="toast"></div>
 
 <!-- FAVORITES QUICK-ADD MODAL -->
@@ -1510,7 +1513,7 @@ function importBackup(input){
   input.value='';
 }
 
-function defCfg(){return{age:51,height:184,startWeight:109,goalWeight:94,dailyKcal:1750,proteinGoal:140};}
+function defCfg(){return{age:30,height:175,startWeight:80,goalWeight:70,dailyKcal:1750,proteinGoal:120};}
 function loadCfg(){try{const s=localStorage.getItem('cfg2');return s?{...defCfg(),...JSON.parse(s)}:defCfg();}catch{return defCfg();}}
 function saveCfg(c){localStorage.setItem('cfg2',JSON.stringify(c));}
 let CFG=loadCfg();
@@ -2050,49 +2053,54 @@ function addFavToLog(){
 
 // ===== PWA INSTALL BANNER =====
 let _deferredPrompt = null;
-const _installBanner = () => document.getElementById('install-banner');
 
-// Ako je već instalirana kao PWA — nikad ne prikazuj banner
 const _isStandalone = () =>
   window.matchMedia('(display-mode: standalone)').matches ||
   window.navigator.standalone === true;
 
+const _isDismissed = () => !!localStorage.getItem('installDismissed');
+
+function _showInstallBanner() {
+  // Nikad ne prikazuj ako je već standalone ili dismissed
+  if (_isStandalone() || _isDismissed()) return;
+  // Ako banner već postoji u DOM-u, ne dodavaj ga opet
+  if (document.getElementById('install-banner')) return;
+
+  const el = document.createElement('div');
+  el.className = 'install-banner';
+  el.id = 'install-banner';
+  el.innerHTML = `
+    <div class="install-inner">
+      <div class="install-icon">📲</div>
+      <div class="install-text">
+        <div class="install-title">Dodaj na početni ekran</div>
+        <div class="install-sub">Radi offline · Brži pristup</div>
+      </div>
+      <button class="install-btn" onclick="triggerInstall()">Instaliraj</button>
+      <button class="install-x" onclick="dismissInstall()">✕</button>
+    </div>`;
+  document.body.appendChild(el);
+  // Mali timeout da browser može renderati element prije animacije
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+}
+
+function _destroyInstallBanner() {
+  const el = document.getElementById('install-banner');
+  if (!el) return;
+  el.classList.remove('show');
+  setTimeout(() => el.remove(), 450); // pričekaj CSS tranziciju
+}
+
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   _deferredPrompt = e;
-  if (!_isStandalone() && !localStorage.getItem('installDismissed')) {
-    setTimeout(() => _installBanner() && _installBanner().classList.add('show'), 1500);
-  }
+  setTimeout(_showInstallBanner, 2000);
 });
 
 window.addEventListener('appinstalled', () => {
-  _installBanner().classList.remove('show');
-  localStorage.setItem('installDismissed', '1');
   _deferredPrompt = null;
-});
-
-// Sakrij odmah ako je standalone pri pokretanju
-if (_isStandalone()) {
-  document.addEventListener('DOMContentLoaded', () => {
-    const b = _installBanner();
-    if (b) b.style.display = 'none';
-  });
-}
-
-// Sakrij banner i ako je installDismissed postavljen (npr. nakon reinstalacije)
-document.addEventListener('DOMContentLoaded', () => {
-  if (localStorage.getItem('installDismissed') || _isStandalone()) {
-    const b = _installBanner();
-    if (b) { b.classList.remove('show'); b.style.display = 'none'; }
-  }
-});
-
-// Prati promjenu display-mode (npr. kad se app otvori kao PWA)
-window.matchMedia('(display-mode: standalone)').addEventListener('change', e => {
-  if (e.matches) {
-    const b = _installBanner();
-    if (b) { b.classList.remove('show'); b.style.display = 'none'; }
-  }
+  localStorage.setItem('installDismissed', '1');
+  _destroyInstallBanner();
 });
 
 async function triggerInstall() {
@@ -2102,24 +2110,22 @@ async function triggerInstall() {
     dismissInstall();
     return;
   }
+  const prompt = _deferredPrompt;
+  _deferredPrompt = null;
   try {
-    await _deferredPrompt.prompt();
-    const { outcome } = await _deferredPrompt.userChoice;
-    // Zatvori banner i spremi bez obzira na ishod (accepted ili dismissed)
-    localStorage.setItem('installDismissed', '1');
-    _installBanner().classList.remove('show');
+    await prompt.prompt();
+    await prompt.userChoice;
   } catch(err) {
     console.error('Install error:', err);
   } finally {
-    _deferredPrompt = null;
-    // Osiguraj da je banner zatvoren u svakom slučaju
-    _installBanner() && _installBanner().classList.remove('show');
+    localStorage.setItem('installDismissed', '1');
+    _destroyInstallBanner();
   }
 }
 
 function dismissInstall() {
-  _installBanner().classList.remove('show');
   localStorage.setItem('installDismissed', '1');
+  _destroyInstallBanner();
 }
 
 // ===== FONT SIZE =====
@@ -2288,15 +2294,7 @@ const OB_GOALS = [
   {icon:'😴', text:'Bolje spavati i smanjiti stres'},
   {icon:'💪', text:'Izgraditi zdravije navike'},
 ];
-const OB_DEADLINES = [
-  {label:'Za 1 mjesec', days:30},
-  {label:'Za 3 mjeseca', days:90},
-  {label:'Za 6 mjeseci', days:180},
-  {label:'Za 1 godinu', days:365},
-  {label:'Bez roka — korak po korak', days:0},
-];
 let _obSelected = new Set();
-let _obDeadline = null;
 
 function initOnboarding(){
   if(localStorage.getItem('obDone')) return;
@@ -2308,15 +2306,6 @@ function initOnboarding(){
       <span class="ob-goal-text">${g.text}</span>
       <span class="ob-goal-check" id="obgc-${i}"></span>
     </div>`).join('');
-  // render deadline options
-  const dl = document.getElementById('ob-deadline-opts');
-  dl.innerHTML = OB_DEADLINES.map((d,i)=>`
-    <div class="ob-deadline-opt" id="obdl-${i}" onclick="obSelectDeadline(${i},${d.days},'${d.label}')">
-      <span>${d.label}</span><span style="font-size:18px;opacity:.4">›</span>
-    </div>`).join('');
-  // set default date
-  const dflt = new Date(); dflt.setMonth(dflt.getMonth()+3);
-  document.getElementById('ob-date').value = dflt.toISOString().split('T')[0];
 
   document.getElementById('onboarding').style.display = 'block';
 }
@@ -2328,16 +2317,6 @@ function obToggleGoal(i){
   else { _obSelected.add(i); el.classList.add('selected'); ch.textContent='✓'; }
 }
 
-function obSelectDeadline(i, days, label){
-  _obDeadline = {days, label};
-  document.querySelectorAll('.ob-deadline-opt').forEach(e=>e.classList.remove('selected'));
-  document.getElementById('obdl-'+i).classList.add('selected');
-  if(days>0){
-    const d = new Date(); d.setDate(d.getDate()+days);
-    document.getElementById('ob-date').value = d.toISOString().split('T')[0];
-  }
-}
-
 function obNext(step){
   document.getElementById('ob-step-'+step).style.display='none';
   document.getElementById('ob-step-'+(step+1)).style.display='block';
@@ -2347,28 +2326,60 @@ function obBack(step){
   document.getElementById('ob-step-'+(step-1)).style.display='block';
 }
 
+function obRecalc(){
+  const age = parseInt(document.getElementById('ob-age').value);
+  const h   = parseInt(document.getElementById('ob-height').value);
+  const w   = parseFloat(document.getElementById('ob-weight').value);
+  const box = document.getElementById('ob-bmr-box');
+  if(!age||!h||!w||isNaN(age)||isNaN(h)||isNaN(w)){box.style.display='none';return;}
+  const bmr  = Math.round(10*w + 6.25*h - 5*age + 5);
+  const tdee = Math.round(bmr * 1.375);
+  const rec  = Math.round(tdee - 550);
+  document.getElementById('ob-bmr-val').textContent  = bmr.toLocaleString('hr') + ' kcal';
+  document.getElementById('ob-tdee-val').textContent = tdee.toLocaleString('hr') + ' kcal';
+  document.getElementById('ob-rec-val').textContent  = rec + ' kcal/dan';
+  box.style.display = 'block';
+}
+
 function obFinish(){
+  const age = parseInt(document.getElementById('ob-age').value);
+  const h   = parseInt(document.getElementById('ob-height').value);
+  const sw  = parseFloat(document.getElementById('ob-weight').value);
+  const gw  = parseFloat(document.getElementById('ob-goal-weight').value);
+  const err = document.getElementById('ob-data-err');
+
+  if([age,h,sw,gw].some(v=>!v||isNaN(v))){
+    err.textContent='⚠️ Molim unesi sve podatke.'; err.style.display='block'; return;
+  }
+  if(gw>=sw){
+    err.textContent='⚠️ Ciljna težina mora biti manja od trenutne.'; err.style.display='block'; return;
+  }
+  err.style.display='none';
+
+  // Izračunaj preporučeni kalorijski unos
+  const bmr  = Math.round(10*sw + 6.25*h - 5*age + 5);
+  const tdee = Math.round(bmr * 1.375);
+  const kcal = Math.round(tdee - 550);
+  const prot = Math.round(sw * 1.6);
+
+  CFG = {age, height:h, startWeight:sw, goalWeight:gw, dailyKcal:kcal, proteinGoal:prot};
+  saveCfg(CFG);
+
+  // Spremi odabrane ciljeve
   const selectedGoals = [..._obSelected].map(i=>OB_GOALS[i].text);
   const custom = document.getElementById('ob-custom-goal').value.trim();
   if(custom) selectedGoals.push(custom);
-  const deadline = document.getElementById('ob-date').value;
-  const motivation = document.getElementById('ob-motivation').value.trim();
-
-  // Save goals to goals2 storage
-  const goals = loadGoals();
-  selectedGoals.forEach(title=>{
-    goals.push({id:Date.now()+Math.random(), title, desc:'', type:'binary', done:false, created:new Date().toLocaleDateString('hr')});
-  });
-  if(deadline){
-    goals.forEach(g=>{ if(!g.deadline) g.deadline=deadline; });
+  if(selectedGoals.length){
+    const goals = loadGoals();
+    selectedGoals.forEach(title=>{
+      goals.push({id:Date.now()+Math.random(), title, desc:'', type:'binary', done:false, created:new Date().toLocaleDateString('hr')});
+    });
+    saveGoals(goals);
   }
-  saveGoals(goals);
-
-  // Save motivation
-  if(motivation) localStorage.setItem('obMotivation', motivation);
 
   localStorage.setItem('obDone', '1');
   document.getElementById('onboarding').style.display='none';
+  renderDanas();
   showToast('✓ Postavljeno! Krećemo 🚀');
 }
 
