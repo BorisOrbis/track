@@ -1943,19 +1943,15 @@ if (_isStandalone()) {
 
 async function triggerInstall() {
   if (!_deferredPrompt) {
-    // iOS fallback
     const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    if (isIOS) {
-      showToast('Na iPhoneu: Share → "Add to Home Screen"');
-    } else {
-      showToast('Otvori browser menu → "Install app"');
-    }
+    showToast(isIOS ? 'Share → "Add to Home Screen"' : 'Browser menu → "Install app"');
     return;
   }
   try {
     await _deferredPrompt.prompt();
     const { outcome } = await _deferredPrompt.userChoice;
     if (outcome === 'accepted') {
+      localStorage.setItem('installDismissed', '1');
       _installBanner().classList.remove('show');
     }
   } catch(err) {
