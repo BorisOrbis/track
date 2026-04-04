@@ -2079,23 +2079,41 @@ if (_isStandalone()) {
   });
 }
 
+// Sakrij banner i ako je installDismissed postavljen (npr. nakon reinstalacije)
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('installDismissed') || _isStandalone()) {
+    const b = _installBanner();
+    if (b) { b.classList.remove('show'); b.style.display = 'none'; }
+  }
+});
+
+// Prati promjenu display-mode (npr. kad se app otvori kao PWA)
+window.matchMedia('(display-mode: standalone)').addEventListener('change', e => {
+  if (e.matches) {
+    const b = _installBanner();
+    if (b) { b.classList.remove('show'); b.style.display = 'none'; }
+  }
+});
+
 async function triggerInstall() {
   if (!_deferredPrompt) {
     const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
     showToast(isIOS ? 'Share → "Add to Home Screen"' : 'Browser menu → "Install app"');
+    dismissInstall();
     return;
   }
   try {
     await _deferredPrompt.prompt();
     const { outcome } = await _deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      localStorage.setItem('installDismissed', '1');
-      _installBanner().classList.remove('show');
-    }
+    // Zatvori banner i spremi bez obzira na ishod (accepted ili dismissed)
+    localStorage.setItem('installDismissed', '1');
+    _installBanner().classList.remove('show');
   } catch(err) {
     console.error('Install error:', err);
   } finally {
     _deferredPrompt = null;
+    // Osiguraj da je banner zatvoren u svakom slučaju
+    _installBanner() && _installBanner().classList.remove('show');
   }
 }
 
