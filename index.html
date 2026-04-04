@@ -230,6 +230,72 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 18px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;z-index:600;white-space:nowrap;box-shadow:0 4px 16px var(--shadow);}
 /* INSTALL BANNER */
+
+/* ===== CILJEVI ===== */
+.goal-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;box-shadow:0 2px 8px var(--shadow);position:relative;transition:opacity .3s;}
+.goal-card.done{opacity:.55;}
+.goal-card.done .goal-title{text-decoration:line-through;}
+.goal-header{display:flex;align-items:flex-start;gap:12px;}
+.goal-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);background:var(--input-bg);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:14px;transition:all .2s;margin-top:1px;}
+.goal-check.checked{background:var(--green);border-color:var(--green);color:#fff;}
+.goal-body{flex:1;min-width:0;}
+.goal-title{font-size:15px;font-weight:700;letter-spacing:-.01em;line-height:1.3;}
+.goal-desc{font-size:12px;color:var(--text-muted);margin-top:3px;line-height:1.4;}
+.goal-meta{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;}
+.goal-tag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:var(--macro-bg);color:var(--text-muted);font-family:var(--font-mono);}
+.goal-tag.green{background:rgba(0,184,148,.12);color:var(--green);}
+.goal-tag.accent{background:rgba(233,69,96,.12);color:var(--accent);}
+.goal-del{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;border:1px solid var(--border);background:var(--input-bg);color:var(--text-muted);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;}
+.goal-card:hover .goal-del{opacity:1;}
+.goal-progress-wrap{margin-top:10px;}
+.goal-progress-bar{height:6px;background:var(--prog-track);border-radius:3px;overflow:hidden;margin-top:4px;}
+.goal-progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s;}
+.goal-progress-fill.done-fill{background:var(--green);}
+.goal-progress-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);font-family:var(--font-mono);margin-top:3px;}
+.goal-input-row{display:flex;align-items:center;gap:8px;margin-top:6px;}
+.goal-curr-input{width:70px;background:var(--input-bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--font-mono);font-size:14px;font-weight:700;padding:5px 8px;outline:none;text-align:right;}
+.goal-curr-input:focus{border-color:var(--accent);}
+.goal-upd-btn{padding:5px 12px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;}
+/* Add goal modal */
+.goal-fab{position:fixed;bottom:calc(80px + env(safe-area-inset-bottom));right:16px;width:52px;height:52px;border-radius:50%;background:var(--accent);color:#fff;font-size:26px;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(233,69,96,.4);z-index:150;transition:transform .2s;}
+.goal-fab.visible{display:flex;}
+.goal-fab:active{transform:scale(.92);}
+.goal-modal-overlay{position:fixed;inset:0;background:var(--modal-bg);backdrop-filter:blur(4px);z-index:600;opacity:0;pointer-events:none;transition:opacity .3s;}
+.goal-modal-overlay.open{opacity:1;pointer-events:all;}
+.goal-modal{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-radius:20px 20px 0 0;padding:24px 20px 32px;z-index:700;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);max-height:85vh;overflow-y:auto;}
+.goal-modal.open{transform:translateY(0);}
+.goal-modal-title{font-size:18px;font-weight:800;margin-bottom:18px;}
+.gm-label{font-size:12px;font-weight:600;color:var(--text-muted);margin-bottom:5px;}
+.gm-input{width:100%;background:var(--input-bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font-display);font-size:15px;padding:10px 13px;outline:none;margin-bottom:14px;transition:border-color .2s;}
+.gm-input:focus{border-color:var(--accent);}
+.gm-type-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.gm-type-btn{padding:10px;border:2px solid var(--border);border-radius:10px;background:var(--input-bg);color:var(--text-muted);font-size:12px;font-weight:700;cursor:pointer;text-align:center;transition:all .2s;}
+.gm-type-btn.selected{border-color:var(--accent);color:var(--accent);background:rgba(233,69,96,.08);}
+.gm-numeric{display:none;margin-bottom:14px;}
+.gm-numeric.show{display:block;}
+.goal-empty{text-align:center;padding:48px 20px;color:var(--text-muted);}
+.goal-empty-icon{font-size:44px;margin-bottom:12px;}
+.goal-empty-txt{font-size:14px;line-height:1.6;}
+.goals-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.gs-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;}
+.gs-num{font-size:22px;font-weight:800;font-family:var(--font-mono);}
+.gs-lbl{font-size:10px;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-top:2px;}
+
+
+/* ONBOARDING */
+.ob-step{animation:obFadeIn .3s ease;}
+@keyframes obFadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.ob-btn-primary{width:100%;padding:15px;background:var(--accent);color:#fff;border:none;border-radius:13px;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:-.01em;}
+.ob-btn-secondary{padding:15px 20px;background:var(--input-bg);color:var(--text);border:1px solid var(--border);border-radius:13px;font-size:14px;font-weight:700;cursor:pointer;}
+.ob-goal-item{display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--surface);border:2px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s;}
+.ob-goal-item.selected{border-color:var(--accent);background:rgba(233,69,96,.06);}
+.ob-goal-item .ob-goal-icon{font-size:22px;flex-shrink:0;}
+.ob-goal-item .ob-goal-text{font-size:14px;font-weight:700;}
+.ob-goal-item .ob-goal-check{margin-left:auto;width:22px;height:22px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .2s;}
+.ob-goal-item.selected .ob-goal-check{background:var(--accent);border-color:var(--accent);color:#fff;}
+.ob-deadline-opt{padding:13px 16px;background:var(--surface);border:2px solid var(--border);border-radius:12px;cursor:pointer;font-size:14px;font-weight:700;transition:all .2s;display:flex;justify-content:space-between;align-items:center;}
+.ob-deadline-opt.selected{border-color:var(--accent);background:rgba(233,69,96,.06);color:var(--accent);}
+
 .install-banner{position:fixed;bottom:calc(62px + env(safe-area-inset-bottom));left:0;right:0;z-index:200;padding:0 12px 10px;transform:translateY(120%);transition:transform .4s cubic-bezier(.4,0,.2,1);}
 .install-banner.show{transform:translateY(0);}
 .install-inner{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px var(--shadow);}
@@ -663,8 +729,64 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <button class="nav-btn" onclick="showPage('stats',this)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Stats
   </button>
+
 </nav>
 
+
+
+<!-- ONBOARDING -->
+<div id="onboarding" style="display:none;position:fixed;inset:0;z-index:1000;background:var(--bg);overflow-y:auto;padding:0;">
+  <div style="max-width:420px;margin:0 auto;padding:40px 24px 60px;">
+
+    <!-- Step 1: Dobrodošlica -->
+    <div id="ob-step-1" class="ob-step">
+      <div style="text-align:center;padding:20px 0 32px;">
+        <div style="font-size:64px;margin-bottom:16px;">🎯</div>
+        <div style="font-size:28px;font-weight:800;letter-spacing:-.02em;margin-bottom:10px;">Dobrodošao u <span style="color:var(--accent)">Track</span></div>
+        <div style="font-size:14px;color:var(--text-muted);line-height:1.6;">Brzo postavi svoje ciljeve i počni pratiti napredak.<br>Traje manje od minute.</div>
+      </div>
+      <div style="margin-bottom:20px;">
+        <div class="slabel" style="margin-bottom:8px;">💪 Što želiš postići? (odaberi sve što se odnosi)</div>
+        <div id="ob-goals-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+      <div style="margin-bottom:20px;">
+        <div class="slabel" style="margin-bottom:6px;">✏️ Vlastiti cilj (opcionalno)</div>
+        <input id="ob-custom-goal" class="sinput" placeholder="npr. Trčati 5km bez prestanka" maxlength="80">
+      </div>
+      <button onclick="obNext(1)" class="ob-btn-primary">Dalje →</button>
+    </div>
+
+    <!-- Step 2: Postavi rok -->
+    <div id="ob-step-2" class="ob-step" style="display:none;">
+      <div style="margin-bottom:8px;font-size:11px;color:var(--text-muted);font-family:var(--font-mono);letter-spacing:.1em;">KORAK 2 OD 3</div>
+      <div style="font-size:22px;font-weight:800;margin-bottom:6px;">Kad to planiraš postići?</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;">Rok ti pomaže ostati fokusiran.</div>
+      <div id="ob-deadline-opts" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;"></div>
+      <div style="margin-bottom:24px;">
+        <div class="slabel" style="margin-bottom:6px;">ili odaberi datum</div>
+        <input type="date" id="ob-date" class="sinput">
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="obBack(2)" class="ob-btn-secondary">← Nazad</button>
+        <button onclick="obNext(2)" class="ob-btn-primary" style="flex:1;">Dalje →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Motivacija -->
+    <div id="ob-step-3" class="ob-step" style="display:none;">
+      <div style="margin-bottom:8px;font-size:11px;color:var(--text-muted);font-family:var(--font-mono);letter-spacing:.1em;">KORAK 3 OD 3</div>
+      <div style="font-size:22px;font-weight:800;margin-bottom:6px;">Zašto ti je to važno?</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;">Podsjetnik na tvoju motivaciju pomaže u teškim danima.</div>
+      <textarea id="ob-motivation" class="sinput" rows="3" placeholder="npr. Želim biti fit za ljetni odmor i imati više energije za obitelj…" style="resize:none;line-height:1.5;font-size:14px;"></textarea>
+      <div style="margin-bottom:24px;"></div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="obBack(3)" class="ob-btn-secondary">← Nazad</button>
+        <button onclick="obFinish()" class="ob-btn-primary" style="flex:1;background:var(--green);">✓ Počni pratiti</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <div class="install-banner" id="install-banner">
   <div class="install-inner">
@@ -1462,7 +1584,7 @@ function sd(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
 function showToast(m,t=2200){const el=document.getElementById('toast');el.textContent=m;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),t);}
 
 // ===== NAV =====
-function showPage(id,btn){
+function showPage(id,btn){ if(id==='ciljevi'){setTimeout(renderGoals,50);} 
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
@@ -1998,6 +2120,240 @@ function loadFontSize() {
   applyFontSize(saved);
 }
 
+
+// ===== CILJEVI =====
+let _goalType = 'binary';
+
+function loadGoals(){ try{ return JSON.parse(localStorage.getItem('goals2')||'[]'); }catch{ return []; } }
+function saveGoals(g){ localStorage.setItem('goals2', JSON.stringify(g)); }
+
+function selectGoalType(t){
+  _goalType = t;
+  document.getElementById('gm-type-binary').classList.toggle('selected', t==='binary');
+  document.getElementById('gm-type-numeric').classList.toggle('selected', t==='numeric');
+  document.getElementById('gm-numeric-wrap').classList.toggle('show', t==='numeric');
+}
+
+function openGoalModal(){
+  document.getElementById('gm-title').value='';
+  document.getElementById('gm-desc').value='';
+  document.getElementById('gm-target').value='';
+  document.getElementById('gm-unit').value='';
+  document.getElementById('gm-start-val').value='';
+  selectGoalType('binary');
+  document.getElementById('goal-modal-overlay').classList.add('open');
+  document.getElementById('goal-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('gm-title').focus(), 350);
+}
+
+function closeGoalModal(){
+  document.getElementById('goal-modal-overlay').classList.remove('open');
+  document.getElementById('goal-modal').classList.remove('open');
+}
+
+function saveGoal(){
+  const title = document.getElementById('gm-title').value.trim();
+  if(!title){ showToast('⚠️ Unesi naziv cilja'); return; }
+  const goals = loadGoals();
+  const goal = {
+    id: Date.now(),
+    title,
+    desc: document.getElementById('gm-desc').value.trim(),
+    type: _goalType,
+    done: false,
+    created: new Date().toLocaleDateString('hr')
+  };
+  if(_goalType === 'numeric'){
+    goal.target = parseFloat(document.getElementById('gm-target').value)||0;
+    goal.unit = document.getElementById('gm-unit').value.trim();
+    goal.startVal = parseFloat(document.getElementById('gm-start-val').value)||0;
+    goal.current = goal.startVal;
+  }
+  goals.unshift(goal);
+  saveGoals(goals);
+  closeGoalModal();
+  renderGoals();
+  showToast('✓ Cilj dodan');
+}
+
+function toggleGoalDone(id){
+  const goals = loadGoals();
+  const g = goals.find(x=>x.id===id);
+  if(!g) return;
+  g.done = !g.done;
+  if(g.done && g.type==='numeric') g.current = g.target;
+  saveGoals(goals);
+  renderGoals();
+}
+
+function deleteGoal(id){
+  const goals = loadGoals().filter(x=>x.id!==id);
+  saveGoals(goals);
+  renderGoals();
+}
+
+function updateGoalProgress(id){
+  const goals = loadGoals();
+  const g = goals.find(x=>x.id===id);
+  if(!g) return;
+  const inp = document.getElementById('gcurr-'+id);
+  if(!inp) return;
+  g.current = parseFloat(inp.value)||g.current;
+  if(g.target && g.current>=g.target) g.done=true;
+  saveGoals(goals);
+  renderGoals();
+}
+
+function renderGoals(){
+  const goals = loadGoals();
+  const container = document.getElementById('goals-list');
+  if(!container) return;
+
+  // summary
+  const total = goals.length;
+  const done = goals.filter(g=>g.done).length;
+  const active = total - done;
+  document.getElementById('g-total').textContent = total;
+  document.getElementById('g-done').textContent = done;
+  document.getElementById('g-active').textContent = active;
+
+  // FAB visible only on ciljevi page
+  const fab = document.getElementById('goal-fab');
+  if(fab) fab.classList.toggle('visible', document.getElementById('page-ciljevi').classList.contains('active'));
+
+  if(goals.length===0){
+    container.innerHTML = '<div class="goal-empty"><div class="goal-empty-icon">🎯</div><div class="goal-empty-txt">Nema ciljeva još.<br>Tapni <strong>+</strong> za dodavanje prvog cilja.</div></div>';
+    return;
+  }
+
+  container.innerHTML = goals.map(g => {
+    let progressHtml = '';
+    if(g.type === 'numeric' && g.target){
+      const pct = Math.min(100, Math.round(((g.current - g.startVal)/(g.target - g.startVal))*100));
+      const safePct = isNaN(pct)||pct<0?0:pct;
+      progressHtml = `
+        <div class="goal-progress-wrap">
+          <div class="goal-progress-bar"><div class="goal-progress-fill${g.done?' done-fill':''}" style="width:${safePct}%"></div></div>
+          <div class="goal-progress-labels"><span>${g.startVal}${g.unit?(' '+g.unit):''}</span><span>${safePct}%</span><span>${g.target}${g.unit?(' '+g.unit):''}</span></div>
+          ${!g.done?`<div class="goal-input-row">
+            <span style="font-size:12px;color:var(--text-muted)">Trenutno:</span>
+            <input class="goal-curr-input" id="gcurr-${g.id}" type="number" value="${g.current}" step="any">
+            <button class="goal-upd-btn" onclick="updateGoalProgress(${g.id})">Ažuriraj</button>
+          </div>`:''}
+        </div>`;
+    }
+    const tag = g.done
+      ? '<span class="goal-tag green">✓ Završeno</span>'
+      : (g.type==='numeric'?'<span class="goal-tag accent">📊 Numerički</span>':'<span class="goal-tag">✅ Da/Ne</span>');
+    return `<div class="goal-card${g.done?' done':''}" id="goal-${g.id}">
+      <div class="goal-header">
+        <div class="goal-check${g.done?' checked':''}" onclick="toggleGoalDone(${g.id})">${g.done?'✓':''}</div>
+        <div class="goal-body">
+          <div class="goal-title">${g.title}</div>
+          ${g.desc?`<div class="goal-desc">${g.desc}</div>`:''}
+          <div class="goal-meta">${tag}<span class="goal-tag">${g.created}</span></div>
+          ${progressHtml}
+        </div>
+      </div>
+      <button class="goal-del" onclick="deleteGoal(${g.id})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+
+// ===== ONBOARDING =====
+const OB_GOALS = [
+  {icon:'⚖️', text:'Smršaviti i kontrolirati težinu'},
+  {icon:'🍽️', text:'Zdravije jesti, pratiti kalorije'},
+  {icon:'💧', text:'Piti više vode svaki dan'},
+  {icon:'🚶', text:'Više se kretati i biti aktivan'},
+  {icon:'😴', text:'Bolje spavati i smanjiti stres'},
+  {icon:'💪', text:'Izgraditi zdravije navike'},
+];
+const OB_DEADLINES = [
+  {label:'Za 1 mjesec', days:30},
+  {label:'Za 3 mjeseca', days:90},
+  {label:'Za 6 mjeseci', days:180},
+  {label:'Za 1 godinu', days:365},
+  {label:'Bez roka — korak po korak', days:0},
+];
+let _obSelected = new Set();
+let _obDeadline = null;
+
+function initOnboarding(){
+  if(localStorage.getItem('obDone')) return;
+  // render goal options
+  const gl = document.getElementById('ob-goals-list');
+  gl.innerHTML = OB_GOALS.map((g,i)=>`
+    <div class="ob-goal-item" id="obg-${i}" onclick="obToggleGoal(${i})">
+      <span class="ob-goal-icon">${g.icon}</span>
+      <span class="ob-goal-text">${g.text}</span>
+      <span class="ob-goal-check" id="obgc-${i}"></span>
+    </div>`).join('');
+  // render deadline options
+  const dl = document.getElementById('ob-deadline-opts');
+  dl.innerHTML = OB_DEADLINES.map((d,i)=>`
+    <div class="ob-deadline-opt" id="obdl-${i}" onclick="obSelectDeadline(${i},${d.days},'${d.label}')">
+      <span>${d.label}</span><span style="font-size:18px;opacity:.4">›</span>
+    </div>`).join('');
+  // set default date
+  const dflt = new Date(); dflt.setMonth(dflt.getMonth()+3);
+  document.getElementById('ob-date').value = dflt.toISOString().split('T')[0];
+
+  document.getElementById('onboarding').style.display = 'block';
+}
+
+function obToggleGoal(i){
+  const el = document.getElementById('obg-'+i);
+  const ch = document.getElementById('obgc-'+i);
+  if(_obSelected.has(i)){ _obSelected.delete(i); el.classList.remove('selected'); ch.textContent=''; }
+  else { _obSelected.add(i); el.classList.add('selected'); ch.textContent='✓'; }
+}
+
+function obSelectDeadline(i, days, label){
+  _obDeadline = {days, label};
+  document.querySelectorAll('.ob-deadline-opt').forEach(e=>e.classList.remove('selected'));
+  document.getElementById('obdl-'+i).classList.add('selected');
+  if(days>0){
+    const d = new Date(); d.setDate(d.getDate()+days);
+    document.getElementById('ob-date').value = d.toISOString().split('T')[0];
+  }
+}
+
+function obNext(step){
+  document.getElementById('ob-step-'+step).style.display='none';
+  document.getElementById('ob-step-'+(step+1)).style.display='block';
+}
+function obBack(step){
+  document.getElementById('ob-step-'+step).style.display='none';
+  document.getElementById('ob-step-'+(step-1)).style.display='block';
+}
+
+function obFinish(){
+  const selectedGoals = [..._obSelected].map(i=>OB_GOALS[i].text);
+  const custom = document.getElementById('ob-custom-goal').value.trim();
+  if(custom) selectedGoals.push(custom);
+  const deadline = document.getElementById('ob-date').value;
+  const motivation = document.getElementById('ob-motivation').value.trim();
+
+  // Save goals to goals2 storage
+  const goals = loadGoals();
+  selectedGoals.forEach(title=>{
+    goals.push({id:Date.now()+Math.random(), title, desc:'', type:'binary', done:false, created:new Date().toLocaleDateString('hr')});
+  });
+  if(deadline){
+    goals.forEach(g=>{ if(!g.deadline) g.deadline=deadline; });
+  }
+  saveGoals(goals);
+
+  // Save motivation
+  if(motivation) localStorage.setItem('obMotivation', motivation);
+
+  localStorage.setItem('obDone', '1');
+  document.getElementById('onboarding').style.display='none';
+  showToast('✓ Postavljeno! Krećemo 🚀');
+}
+
 // ===== SERVICE WORKER =====
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -2010,6 +2366,8 @@ if ('serviceWorker' in navigator) {
 loadTheme();
 loadFontSize();
 CFG=loadCfg();
+renderGoals();
+initOnboarding();
 renderDanas();
 renderHrana();
 </script>
