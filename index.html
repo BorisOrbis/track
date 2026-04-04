@@ -1911,30 +1911,47 @@ function addFavToLog(){
 
 // ===== PWA INSTALL BANNER =====
 let _deferredPrompt = null;
+const _installBanner = () => document.getElementById('install-banner');
+
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault();
   _deferredPrompt = e;
-  const dismissed = localStorage.getItem('installDismissed');
-  if (!dismissed) {
-    setTimeout(() => {
-      document.getElementById('install-banner').classList.add('show');
-    }, 2000);
+  if (!localStorage.getItem('installDismissed')) {
+    setTimeout(() => _installBanner() && _installBanner().classList.add('show'), 1500);
   }
 });
+
 window.addEventListener('appinstalled', () => {
-  document.getElementById('install-banner').classList.remove('show');
+  _installBanner().classList.remove('show');
   _deferredPrompt = null;
 });
-function triggerInstall() {
-  if (!_deferredPrompt) return;
-  _deferredPrompt.prompt();
-  _deferredPrompt.userChoice.then(() => {
+
+async function triggerInstall() {
+  if (!_deferredPrompt) {
+    // iOS fallback
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    if (isIOS) {
+      showToast('Na iPhoneu: Share → "Add to Home Screen"');
+    } else {
+      showToast('Otvori browser menu → "Install app"');
+    }
+    return;
+  }
+  try {
+    await _deferredPrompt.prompt();
+    const { outcome } = await _deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      _installBanner().classList.remove('show');
+    }
+  } catch(err) {
+    console.error('Install error:', err);
+  } finally {
     _deferredPrompt = null;
-    document.getElementById('install-banner').classList.remove('show');
-  });
+  }
 }
+
 function dismissInstall() {
-  document.getElementById('install-banner').classList.remove('show');
+  _installBanner().classList.remove('show');
   localStorage.setItem('installDismissed', '1');
 }
 
