@@ -1,4 +1,4 @@
-const CACHE = 'track-v2';
+const CACHE = 'track-v3';
 const ASSETS = [
   '/track/',
   '/track/index.html',
@@ -25,8 +25,17 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  // Network-first: pokušaj mrežu, fallback na cache
   e.respondWith(
-    caches.match(e.request)
-      .then(r => r || fetch(e.request).catch(() => caches.match('/track/index.html')))
+    fetch(e.request)
+      .then(response => {
+        // Spremi svježu verziju u cache
+        const clone = response.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return response;
+      })
+      .catch(() => caches.match(e.request)
+        .then(r => r || caches.match('/track/index.html'))
+      )
   );
 });
