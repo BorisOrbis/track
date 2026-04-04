@@ -67,7 +67,7 @@ python3 -m http.server 8080
 ## Struktura projekta
 
 ```
-boris-mrsavljenje-2.html   ← cijela aplikacija u jednom fajlu
+index.html   ← cijela aplikacija u jednom fajlu
 README.md
 ```
 
@@ -81,7 +81,7 @@ Otvori **☰ Postavke** (hamburger ikona gore desno):
 
 | Postavka | Default |
 |----------|---------|
-| Dob | 51 god. |
+| Dob | 5 god. |
 | Visina | 184 cm |
 | Početna težina | 109 kg |
 | Ciljna težina | 94 kg |
