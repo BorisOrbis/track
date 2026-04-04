@@ -1,4 +1,4 @@
-# Boris -15kg 🎯
+# Tracker 🎯
 
 > Jednostavna PWA za praćenje težine, kalorija i navika — namijenjena za osobnu upotrebu.  
 > Radi **100% offline**, bez servera, bez baze podataka, bez registracije.  
