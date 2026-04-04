@@ -9,9 +9,9 @@
 <meta name="apple-mobile-web-app-title" content="Track">
 <title>Track</title>
 <link rel="manifest" href="/track/manifest.json">
-<link rel="apple-touch-icon" href="/track/icons/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/track/icons/icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/track/icons/icon-512.png">
+<link rel="apple-touch-icon" href="/track/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/track/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/track/icon-512.png">
 <style>
 /* System font stack — radi potpuno offline */
 :root {
@@ -224,6 +224,16 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
 
 .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 18px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;z-index:600;white-space:nowrap;box-shadow:0 4px 16px var(--shadow);}
+/* INSTALL BANNER */
+.install-banner{position:fixed;bottom:calc(62px + env(safe-area-inset-bottom));left:0;right:0;z-index:200;padding:0 12px 10px;transform:translateY(120%);transition:transform .4s cubic-bezier(.4,0,.2,1);}
+.install-banner.show{transform:translateY(0);}
+.install-inner{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px var(--shadow);}
+.install-icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#ff6b6b);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px;}
+.install-text{flex:1;min-width:0;}
+.install-title{font-size:13px;font-weight:800;letter-spacing:-.01em;}
+.install-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
+.install-btn{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:9px 15px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.install-x{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--input-bg);color:var(--text-muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
 /* ANIMATIONS */
@@ -638,6 +648,18 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   </button>
 </nav>
 
+
+<div class="install-banner" id="install-banner">
+  <div class="install-inner">
+    <div class="install-icon">📲</div>
+    <div class="install-text">
+      <div class="install-title">Dodaj na početni ekran</div>
+      <div class="install-sub">Radi offline · Brži pristup</div>
+    </div>
+    <button class="install-btn" onclick="triggerInstall()">Instaliraj</button>
+    <button class="install-x" onclick="dismissInstall()">✕</button>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <!-- FAVORITES QUICK-ADD MODAL -->
@@ -1885,6 +1907,35 @@ function addFavToLog(){
   _closeFavModal();
   showToast('✓ '+food.n+' ('+g+'g) dodano');
   renderDanas();
+}
+
+// ===== PWA INSTALL BANNER =====
+let _deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _deferredPrompt = e;
+  const dismissed = localStorage.getItem('installDismissed');
+  if (!dismissed) {
+    setTimeout(() => {
+      document.getElementById('install-banner').classList.add('show');
+    }, 2000);
+  }
+});
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-banner').classList.remove('show');
+  _deferredPrompt = null;
+});
+function triggerInstall() {
+  if (!_deferredPrompt) return;
+  _deferredPrompt.prompt();
+  _deferredPrompt.userChoice.then(() => {
+    _deferredPrompt = null;
+    document.getElementById('install-banner').classList.remove('show');
+  });
+}
+function dismissInstall() {
+  document.getElementById('install-banner').classList.remove('show');
+  localStorage.setItem('installDismissed', '1');
 }
 
 // ===== SERVICE WORKER =====

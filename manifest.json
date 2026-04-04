@@ -11,25 +11,25 @@
   "lang": "hr",
   "icons": [
     {
-      "src": "/track/icons/icon-192.png",
+      "src": "/track/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/track/icons/icon-192.png",
+      "src": "/track/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/track/icons/icon-512.png",
+      "src": "/track/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/track/icons/icon-512.png",
+      "src": "/track/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
