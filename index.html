@@ -583,8 +583,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="mt">
       <button class="mt-btn active" data-meal="Doručak" onclick="selMeal(this)">Doručak</button>
       <button class="mt-btn" data-meal="Ručak" onclick="selMeal(this)">Ručak</button>
-      <button class="mt-btn" data-meal="Večera" onclick="selMeal(this)">Večera</button>
       <button class="mt-btn" data-meal="Užina" onclick="selMeal(this)">Užina</button>
+      <button class="mt-btn" data-meal="Večera" onclick="selMeal(this)">Večera</button>
     </div>
     <div class="sw">
       <input type="text" class="si" id="food-search" placeholder="Pretraži namirnice..." autocomplete="off" oninput="searchFood(this.value)">
@@ -816,8 +816,8 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="mt" style="margin-bottom:14px">
       <button class="mt-btn active" data-meal="Doručak" onclick="selFavMeal(this)">Doručak</button>
       <button class="mt-btn" data-meal="Ručak" onclick="selFavMeal(this)">Ručak</button>
-      <button class="mt-btn" data-meal="Večera" onclick="selFavMeal(this)">Večera</button>
       <button class="mt-btn" data-meal="Užina" onclick="selFavMeal(this)">Užina</button>
+      <button class="mt-btn" data-meal="Večera" onclick="selFavMeal(this)">Večera</button>
     </div>
     <div class="pr">
       <input type="number" class="pi" id="fav-modal-g" placeholder="Porcija (g)" min="1" max="2000" oninput="updFavModalPrev()">
@@ -1762,7 +1762,7 @@ function renderDanas(){
 function renderHrana(){
   const k=dk(curFoodDate),isT=k===today();
   document.getElementById('food-date-disp').textContent=isT?'Danas':curFoodDate.toLocaleDateString('hr-HR',{weekday:'long',day:'numeric',month:'long'});
-  const foods=getDayF(k),meals=['Doručak','Ručak','Večera','Užina'];
+  const foods=getDayF(k),meals=['Doručak','Ručak','Užina','Večera'];
   let html='';
   meals.forEach(meal=>{
     const mf=foods.filter(f=>f.meal===meal);if(!mf.length)return;
