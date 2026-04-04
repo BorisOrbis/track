@@ -1,0 +1,26 @@
+{
+  "name": "Track",
+  "short_name": "Track",
+  "description": "Praćenje težine, kalorija i navika",
+  "start_url": "/track/",
+  "scope": "/track/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f2f3f7",
+  "theme_color": "#ffffff",
+  "lang": "hr",
+  "icons": [
+    {
+      "src": "/track/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/track/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

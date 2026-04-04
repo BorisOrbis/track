@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html lang="hr" data-theme="dark">
+<html lang="hr" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#0f0f1a">
+<meta name="theme-color" content="#ffffff">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Boris -15kg">
-<title>Boris -15kg</title>
+<meta name="apple-mobile-web-app-title" content="Track">
+<title>Track</title>
+<link rel="manifest" href="/track/manifest.json">
+<link rel="apple-touch-icon" href="/track/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/track/icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/track/icons/icon-512.png">
 <style>
 /* System font stack — radi potpuno offline */
 :root {
@@ -1352,7 +1356,7 @@ let CFG=loadCfg();
 
 // ===== THEME =====
 function loadTheme(){
-  const t=localStorage.getItem('theme')||'dark';
+  const t=localStorage.getItem('theme')||'light';
   document.documentElement.setAttribute('data-theme',t);
   document.getElementById('theme-btn').textContent=t==='dark'?'🌙':'☀️';
 }
@@ -1881,6 +1885,14 @@ function addFavToLog(){
   _closeFavModal();
   showToast('✓ '+food.n+' ('+g+'g) dodano');
   renderDanas();
+}
+
+// ===== SERVICE WORKER =====
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/track/sw.js', { scope: '/track/' })
+      .catch(() => {});
+  });
 }
 
 // ===== INIT =====
