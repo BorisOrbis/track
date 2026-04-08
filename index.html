@@ -577,6 +577,34 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="dd" id="food-date-disp"></div>
     <button class="dnb" onclick="changeDay(1)">›</button>
   </div>
+  <div class="card no-stripe" id="hrana-summary-card" style="margin-bottom:13px">
+    <div class="ct">Ukupno danas</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div style="font-family:var(--font-mono)">
+        <span style="font-size:24px;font-weight:800" id="hs-kcal">0</span>
+        <span style="font-size:12px;color:var(--text-muted)"> / <span id="hs-goal">—</span> kcal</span>
+      </div>
+      <div style="font-size:11px;font-family:var(--font-mono);font-weight:700;padding:4px 10px;border-radius:8px;background:var(--macro-bg)" id="hs-rem-badge">ostalo: —</div>
+    </div>
+    <div style="height:5px;background:var(--prog-track);border-radius:3px;overflow:hidden;margin-bottom:12px">
+      <div id="hs-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--yellow));border-radius:3px;transition:width .4s"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      <div style="background:var(--macro-bg);border-radius:10px;padding:9px 8px;text-align:center">
+        <div style="font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--blue)" id="hs-p">0g</div>
+        <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Proteini</div>
+        <div style="font-size:9px;color:var(--text-muted)" id="hs-p-goal"></div>
+      </div>
+      <div style="background:var(--macro-bg);border-radius:10px;padding:9px 8px;text-align:center">
+        <div style="font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--yellow)" id="hs-m">0g</div>
+        <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Masti</div>
+      </div>
+      <div style="background:var(--macro-bg);border-radius:10px;padding:9px 8px;text-align:center">
+        <div style="font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--green)" id="hs-u">0g</div>
+        <div style="font-size:9px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Ugljikohidrati</div>
+      </div>
+    </div>
+  </div>
   <div class="card no-stripe" style="overflow:visible;">
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);border-radius:var(--radius) var(--radius) 0 0;pointer-events:none;"></div>
     <div class="ct">Dodaj obrok</div>
@@ -592,7 +620,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     </div>
     <div id="food-preview" style="display:none">
       <div class="pr">
-        <input type="number" class="pi" id="portion-inp" placeholder="Porcija (g)" value="100" min="1" max="2000">
+        <input type="number" class="pi" id="portion-inp" placeholder="Porcija (g)" value="" min="1" max="2000">
         <button class="btn btn-primary" onclick="addFood()">+ Dodaj</button>
       </div>
       <div style="font-size:10px;color:var(--text-muted);margin-top:6px;font-family:var(--font-mono)" id="food-prev-txt"></div>
@@ -1093,13 +1121,13 @@ const FOOD_DB=[
   {n:"Konopljine sjemenke",k:5.53,p:32,m:49,u:9},
   // PROTEINSKI SUPLEMENTI
   {n:"Protein shake",k:1.2,p:24,m:2,u:4},
-  {n:"Whey protein (ON Gold Standard)",k:4.033,p:24,m:1.5,u:3},
-  {n:"Optimum Nutrition Whey",k:4,p:24,m:1,u:3},
-  {n:"Whey isolat",k:3.667,p:27,m:0.5,u:0.5},
-  {n:"Kazein protein (30g)",k:3.667,p:24,m:1,u:3},
-  {n:"Plant protein (30g)",k:3.833,p:22,m:2,u:5},
-  {n:"Protein bar (Quest, 60g)",k:3.333,p:21,m:8,u:22},
-  {n:"Protein bar (prosjek, 50g)",k:3.8,p:18,m:7,u:18},
+  {n:"Whey protein (ON Gold Standard)",k:4.033,p:80,m:5,u:10},
+  {n:"Optimum Nutrition Whey",k:4,p:80,m:3.3,u:10},
+  {n:"Whey isolat",k:3.667,p:90,m:1.7,u:1.7},
+  {n:"Kazein protein (30g)",k:3.667,p:80,m:3.3,u:10},
+  {n:"Plant protein (30g)",k:3.833,p:73.3,m:6.7,u:16.7},
+  {n:"Protein bar (Quest, 60g)",k:3.333,p:35,m:13.3,u:36.7},
+  {n:"Protein bar (prosjek, 50g)",k:3.8,p:36,m:14,u:36},
   {n:"Kreatinin monohidrat (5g)",k:0,p:0,m:0,u:0},
   // GOTOVA JELA I HRVATSKA KUHINJA
   {n:"Sarma (punjena)",k:1.45,p:8,m:8,u:11},
@@ -1267,40 +1295,40 @@ const FOOD_DB=[
   {n:"Podravka pašteta (100g)",k:2.6,p:13,m:22,u:3},
   {n:"Podravka riblja pašteta (100g)",k:1.95,p:14,m:15,u:2},
   // GAVRILOVIĆ
-  {n:"Gavrilović kulen (30g)",k:4.2,p:5.5,m:9.5,u:0.5},
-  {n:"Gavrilović zimska salama (30g)",k:3.8,p:5.5,m:8.8,u:0.8},
-  {n:"Gavrilović čajna kobasica (30g)",k:3.35,p:5,m:6.8,u:1},
-  {n:"Gavrilović trajni sir (30g)",k:3.56,p:7,m:9,u:0.3},
-  {n:"Gavrilović sušena šunka (30g)",k:2.5,p:9,m:4,u:0.2},
+  {n:"Gavrilović kulen (30g)",k:4.2,p:18.3,m:31.7,u:1.7},
+  {n:"Gavrilović zimska salama (30g)",k:3.8,p:18.3,m:29.3,u:2.7},
+  {n:"Gavrilović čajna kobasica (30g)",k:3.35,p:16.7,m:22.7,u:3.3},
+  {n:"Gavrilović trajni sir (30g)",k:3.56,p:23.3,m:30,u:1},
+  {n:"Gavrilović sušena šunka (30g)",k:2.5,p:30,m:13.3,u:0.7},
   // SIRELA / MLINAR / OSTALI SIREVI
-  {n:"Sirela Gavda (30g)",k:3.56,p:7,m:8.2,u:0.2},
-  {n:"Sirela Edamer (30g)",k:3.57,p:8,m:6.5,u:0.2},
-  {n:"Sir Gouda (30g)",k:3.56,p:7.3,m:7.8,u:0.2},
-  {n:"Sir Emmental (30g)",k:3.8,p:8.2,m:9,u:0.1},
-  {n:"Sir Gauda dimljeni (30g)",k:3.2,p:7,m:8.5,u:0.3},
-  {n:"Brie (30g)",k:3.34,p:5.9,m:8.4,u:0.1},
-  {n:"Feta sir (30g)",k:2.64,p:4,m:6,u:1.2},
-  {n:"Mozzarella (30g)",k:2.8,p:5.5,m:6,u:0.6},
-  {n:"Ricotta (30g)",k:1.74,p:2.8,m:3.3,u:0.9},
-  {n:"Parmezan (10g)",k:4.31,p:3.8,m:2.9,u:0.3},
+  {n:"Sirela Gavda (30g)",k:3.56,p:23.3,m:27.3,u:0.7},
+  {n:"Sirela Edamer (30g)",k:3.57,p:26.7,m:21.7,u:0.7},
+  {n:"Sir Gouda (30g)",k:3.56,p:24.3,m:26,u:0.7},
+  {n:"Sir Emmental (30g)",k:3.8,p:27.3,m:30,u:0.3},
+  {n:"Sir Gauda dimljeni (30g)",k:3.2,p:23.3,m:28.3,u:1},
+  {n:"Brie (30g)",k:3.34,p:19.7,m:28,u:0.3},
+  {n:"Feta sir (30g)",k:2.64,p:13.3,m:20,u:4},
+  {n:"Mozzarella (30g)",k:2.8,p:18.3,m:20,u:2},
+  {n:"Ricotta (30g)",k:1.74,p:9.3,m:11,u:3},
+  {n:"Parmezan (10g)",k:4.31,p:38,m:29,u:3},
   // PEKARNICA / KRUH
-  {n:"Mlinar toast bijeli (30g)",k:2.65,p:2.7,m:1,u:15},
-  {n:"Mlinar toast integralni (30g)",k:2.47,p:3,m:1,u:13},
-  {n:"Mlinar kifla (60g)",k:2.87,p:5.5,m:3,u:31},
-  {n:"Mlinar kroasan maslac (65g)",k:3.88,p:5,m:13,u:30},
-  {n:"Kruh bijeli (kriška 30g)",k:2.65,p:2.5,m:0.5,u:15},
-  {n:"Kruh integralni (kriška 30g)",k:2.47,p:3,m:0.8,u:12},
-  {n:"Kruh raženi (kriška 30g)",k:2.59,p:2.5,m:0.7,u:12},
-  {n:"Lepinja (80g)",k:2.62,p:7,m:2,u:41},
+  {n:"Mlinar toast bijeli (30g)",k:2.65,p:9,m:3.3,u:50},
+  {n:"Mlinar toast integralni (30g)",k:2.47,p:10,m:3.3,u:43.3},
+  {n:"Mlinar kifla (60g)",k:2.87,p:9.2,m:5,u:51.7},
+  {n:"Mlinar kroasan maslac (65g)",k:3.88,p:7.7,m:20,u:46.2},
+  {n:"Kruh bijeli (kriška 30g)",k:2.65,p:8.3,m:1.7,u:50},
+  {n:"Kruh integralni (kriška 30g)",k:2.47,p:10,m:2.7,u:40},
+  {n:"Kruh raženi (kriška 30g)",k:2.59,p:8.3,m:2.3,u:40},
+  {n:"Lepinja (80g)",k:2.62,p:8.75,m:2.5,u:51.25},
   {n:"Bagel (100g)",k:2.45,p:9,m:1.5,u:48},
-  {n:"Pitta kruh (60g)",k:2.58,p:5,m:0.8,u:31},
+  {n:"Pitta kruh (60g)",k:2.58,p:8.3,m:1.3,u:51.7},
   // ŽITARICE / DORUČAK
-  {n:"Kellogg's Cornflakes (30g)",k:3.57,p:2.3,m:0.3,u:26},
-  {n:"Kellogg's Special K (30g)",k:3.75,p:4,m:0.4,u:23},
-  {n:"Nestlé Fitness (30g)",k:3.77,p:3,m:0.8,u:23},
-  {n:"Nestlé Cheerios (30g)",k:3.71,p:3,m:1.5,u:21},
-  {n:"Quaker Oats zobene pahuljice (40g)",k:3.72,p:5,m:2.8,u:24},
-  {n:"Dr. Oetker granola med-orah (45g)",k:4.29,p:4,m:7,u:28},
+  {n:"Kellogg's Cornflakes (30g)",k:3.57,p:7.7,m:1,u:86.7},
+  {n:"Kellogg's Special K (30g)",k:3.75,p:13.3,m:1.3,u:76.7},
+  {n:"Nestlé Fitness (30g)",k:3.77,p:10,m:2.7,u:76.7},
+  {n:"Nestlé Cheerios (30g)",k:3.71,p:10,m:5,u:70},
+  {n:"Quaker Oats zobene pahuljice (40g)",k:3.72,p:12.5,m:7,u:60},
+  {n:"Dr. Oetker granola med-orah (45g)",k:4.29,p:8.9,m:15.6,u:62.2},
   {n:"Müller jogurt voćni (150g)",k:0.867,p:4,m:3,u:21},
   {n:"Müller Milkrice rižin puding (200g)",k:0.93,p:5,m:3.6,u:33},
   // GRICKALICE / KEKSI
@@ -1311,7 +1339,7 @@ const FOOD_DB=[
   {n:"Kraš Bronhi (10g)",k:3.7,p:0.4,m:0.4,u:8},
   {n:"Bahlsen Leibniz keks (15g)",k:4.67,p:1.2,m:2.5,u:11},
   {n:"Digestive keks (15g)",k:4.6,p:1,m:3,u:10},
-  {n:"Oreo (11g, 1 kom)",k:0.53,p:0.6,m:2.3,u:7.5},
+  {n:"Oreo (11g, 1 kom)",k:4.82,p:5.5,m:20.9,u:68.2},
   {n:"Chips Lay's classic (30g)",k:5.37,p:1.9,m:10,u:16},
   {n:"Chips Lay's paprika (30g)",k:5.3,p:1.8,m:9.8,u:16},
   {n:"Pringles original (30g)",k:5.27,p:1.5,m:9.5,u:17},
@@ -1323,9 +1351,9 @@ const FOOD_DB=[
   // ČOKOLADA / SLATKIŠI
   {n:"Milka mliječna čokolada (25g)",k:5.32,p:2,m:7.5,u:15},
   {n:"Milka Oreo čokolada (25g)",k:5.24,p:1.8,m:7,u:16},
-  {n:"Kinder čokolada (12.5g, 1 pločica)",k:0.7,p:1.3,m:4.2,u:6.8},
+  {n:"Kinder čokolada (12.5g, 1 pločica)",k:5.36,p:10.4,m:33.6,u:54.4},
   {n:"Kinder Bueno (43g, 1 kom)",k:2.28,p:3.6,m:14,u:22},
-  {n:"Ferrero Rocher (12.5g, 1 kom)",k:0.74,p:1.3,m:5,u:6},
+  {n:"Ferrero Rocher (12.5g, 1 kom)",k:5.84,p:10.4,m:40,u:48},
   {n:"Snickers (52g)",k:4.71,p:4.3,m:12,u:32},
   {n:"Twix (50g)",k:4.94,p:2.5,m:12,u:33},
   {n:"Mars (51g)",k:4.47,p:2.8,m:9,u:35},
@@ -1683,7 +1711,7 @@ function addFood(){
   saveDayF(k,foods);selFood=null;
   document.getElementById('food-search').value='';
   document.getElementById('food-preview').style.display='none';
-  document.getElementById('portion-inp').value='100';
+  document.getElementById('portion-inp').value='';
   showToast('✓ Dodano');renderHrana();renderDanas();
 }
 function delFood(ts){
@@ -1759,7 +1787,27 @@ function renderDanas(){
 }
 
 // ===== RENDER HRANA =====
+function renderHranaSummary(){
+  const k=dk(curFoodDate);
+  const foods=getDayF(k);
+  const tot=foods.reduce((a,f)=>({kcal:a.kcal+f.kcal,p:a.p+f.p,m:a.m+f.m,u:a.u+f.u}),{kcal:0,p:0,m:0,u:0});
+  document.getElementById('hs-kcal').textContent=tot.kcal;
+  document.getElementById('hs-goal').textContent=CFG.dailyKcal.toLocaleString('hr');
+  const rem=CFG.dailyKcal-tot.kcal;
+  const remEl=document.getElementById('hs-rem-badge');
+  remEl.textContent=(rem>=0?'ostalo: ':'prekoračeno: ')+Math.abs(rem)+' kcal';
+  remEl.style.color=rem<0?'var(--accent)':'var(--text-muted)';
+  const pct=Math.min(100,(tot.kcal/CFG.dailyKcal)*100);
+  document.getElementById('hs-bar').style.width=pct+'%';
+  document.getElementById('hs-p').textContent=tot.p.toFixed(1)+'g';
+  document.getElementById('hs-m').textContent=tot.m.toFixed(1)+'g';
+  document.getElementById('hs-u').textContent=tot.u.toFixed(1)+'g';
+  const pg=document.getElementById('hs-p-goal');
+  if(CFG.proteinGoal){pg.textContent='cilj: '+CFG.proteinGoal+'g';}
+}
+
 function renderHrana(){
+  renderHranaSummary();
   const k=dk(curFoodDate),isT=k===today();
   document.getElementById('food-date-disp').textContent=isT?'Danas':curFoodDate.toLocaleDateString('hr-HR',{weekday:'long',day:'numeric',month:'long'});
   const foods=getDayF(k),meals=['Doručak','Ručak','Užina','Večera'];
