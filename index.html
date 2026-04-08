@@ -2032,8 +2032,8 @@ function openFavModal(id){
   curFavId=id;
   curFavMeal=curMeal; // sync with hrana tab selection
   document.getElementById('fav-modal-title').textContent=food.n;
-  document.getElementById('fav-modal-sub').textContent='Zadana količina: '+fav.defaultG+'g · tapni Dodaj za unos';
-  document.getElementById('fav-modal-g').value=fav.defaultG||100;
+  document.getElementById('fav-modal-sub').textContent='Zadana količina: '+(fav.defaultG||100)+'g · upiši gram ili tapni Dodaj';
+  document.getElementById('fav-modal-g').value='';
   // sync meal buttons
   document.querySelectorAll('#fav-modal-overlay .mt-btn').forEach(b=>{
     b.classList.toggle('active',b.dataset.meal===curFavMeal);
